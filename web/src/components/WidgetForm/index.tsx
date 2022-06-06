@@ -5,6 +5,7 @@ import ideaImageUrl from "../../images/idea.svg";
 import otherImageUrl from "../../images/other.svg";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
+import { FeedbackSucessStep } from "./Steps/FeedbackSucessStep";
 
 export const feedbackTypes = {
     BUG: {
@@ -40,8 +41,11 @@ export type FeedbackType = keyof typeof feedbackTypes
 export function WidgetForm() {
 
     const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+    const [feedbackSent, setFeedbackSent] = useState(false);
+
 
     function handleRestartFeedback(){
+        setFeedbackSent(false)
         setFeedbackType(null)
     }
 
@@ -52,14 +56,21 @@ export function WidgetForm() {
 
        
 
-        {!feedbackType ? (
-            <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType}/>
-            ) : (
-            <FeedbackContentStep feedbackType={feedbackType}
-            onFeedbackRestartRequested={handleRestartFeedback} />
-        )}
+       { feedbackSent ? (
+           <FeedbackSucessStep onFeedbackRestartRequested={handleRestartFeedback}/>
+       ) : (
+            <>
+                {!feedbackType ? (
+                <FeedbackTypeStep onFeedbackTypeChanged=  {setFeedbackType}/>
+                ) : (
+                <FeedbackContentStep feedbackType={feedbackType}
+                onFeedbackRestartRequested={handleRestartFeedback} onFeedbackSent={() => setFeedbackSent(true)}
+                />
+                )}
+            </>
+       )}
 
-        <footer className="text-xs text-neutral-400">
+        <footer className="text-xs text-neutral-400 rounded-md border-transparent flex-1 flex justify-center text-sn hove:bg-bg-brand-300 focus:outline">
             Feito amor com por Ronaldo Lucas 
         </footer>
         </div>
